@@ -16,7 +16,8 @@ const Cart = () => {
         ...catalog.find(o => o.name === c.name)!!
     })), [cart, catalog]);
 
-    const total = aggregatedCart.reduce((prev, o) => prev + o.price, 0);
+    const totalPrice = aggregatedCart.reduce((prev, o) => prev + o.price * o.quantity, 0);
+    const totalItems = cart.reduce((prev, o) => prev + o.quantity, 0);
 
     return <>
         <div className={"header"}>
@@ -64,7 +65,8 @@ const Cart = () => {
                                         ));
                                         console.log("[DELETE ITEM] clicked.");
                                     }}
-                            >⛔️
+                            >
+                                ⛔️
                             </button>
                             <div>
                                 <img className={"table-thumbnail"} src={item.img}/>
@@ -79,7 +81,7 @@ const Cart = () => {
                                               console.log("[QUANTITY CHANGE] clicked.");
                                           }}/>
                             </div>
-                            <div>{item.price.toFixed(2)}€</div>
+                            <div>{(item.price * item.quantity).toFixed(2)}€</div>
                         </div>)
                 }
                 <div className={"table-row table-footer"}>
@@ -87,15 +89,24 @@ const Cart = () => {
                     <div></div>
                     <div>
                         <div style={{color: "#888", marginRight: "8px"}}>Subtotal</div>
-                        {cart.length} Items
+                        {totalItems} Items
                     </div>
-                    <div>{total.toFixed(2)}€</div>
+                    <div>{totalPrice.toFixed(2)}€</div>
                 </div>
             </div>
         </div>
         <div className={"footer"}>
             <button className={"generic-btn rect-btn rect-btn-positive btn-positive"}
-                    onClick={() => console.log("[PAY NOW] clicked.")}
+                    onClick={() => {
+                        console.log("[PAY NOW] clicked.");
+                        const result = aggregatedCart.map(item => ({
+                            ...item,
+                            subtotal: (item.price * item.quantity).toFixed(2)
+                        }));
+                        console.log(result);
+                        console.log(`Total Amount: ${totalPrice.toFixed(2)}`);
+                        alert(`[Pay Now] Clicked.\n\nResult:\n${JSON.stringify(result, null, 4)}\n\nTotal Amount of Items: ${totalItems}\nTotal Amount: ${totalPrice.toFixed(2)}`);
+                    }}
                     disabled={cart.length === 0}>
                 PAY NOW
             </button>

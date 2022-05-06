@@ -159,7 +159,7 @@ a {
 
 .table {
     display: grid;
-    grid-template-columns: auto 8fr auto auto;
+    grid-template-columns: auto 8fr auto 2fr;
     font-size: 14px;
 }
 
@@ -178,12 +178,12 @@ a {
     justify-content: flex-end;
 }
 
-.table-header div {
+.table-header > div {
     border-bottom: 1px solid #ddd;
     color: #888;
 }
 
-.table-footer div {
+.table-footer > div {
     border-top: 1px solid #ddd;
 }
 
